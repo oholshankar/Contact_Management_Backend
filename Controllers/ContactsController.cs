@@ -9,29 +9,27 @@ namespace Contact_Management.Controllers
     [ApiController]
     public class ContactsController : ControllerBase
     {
+        public ILogger<ContactsController> _logger;
+        public ContactsController(ILogger<ContactsController> logger)
+        {
+            _logger= logger;
+        }
+
         [HttpGet]
         public ActionResult<List<Contact>> Getcontacts()
         {
-            return ContactDbHelper.ReadFromJsonFile<Contact>();
+                return ContactDbHelper.ReadFromJsonFile<Contact>();
+                   
         }
 
         [HttpGet("{id}")]
         public ActionResult<Contact> Getcontact(int id)
         {
-            try
-            {
                 var contacts = ContactDbHelper.ReadFromJsonFile<Contact>();
                 var contactFirst = contacts.FirstOrDefault(p => p.Id == id);
-                if (contactFirst == null)
-                {
-                    throw new Exception("Not Found data");
-                }
+
                 return contactFirst;
-            }
-            catch(Exception ex)
-            {
-                return BadRequest("Internal Server Error");
-            }
+ 
         }
 
         [HttpPost]
@@ -51,11 +49,6 @@ namespace Contact_Management.Controllers
             var contacts = ContactDbHelper.ReadFromJsonFile<Contact>();
             var contact = contacts.FirstOrDefault(p => p.Id == id);
 
-            if (contact == null) { 
-                
-                return NotFound();
-            }
-
             contact.FirstName = updatedContact.FirstName;
             contact.LastName = updatedContact.LastName;
             ContactDbHelper.WriteToJsonFile(contacts);
@@ -66,16 +59,10 @@ namespace Contact_Management.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteContact(int id)
         {
-            var people = ContactDbHelper.ReadFromJsonFile<Contact>();
-            var person = people.FirstOrDefault(p => p.Id == id);
-
-            if (person == null)
-            {
-                return NotFound();
-            }
-
-            people.Remove(person);
-            ContactDbHelper.WriteToJsonFile(people);
+            var contacts = ContactDbHelper.ReadFromJsonFile<Contact>();
+            var contact = contacts.FirstOrDefault(p => p.Id == id);
+            contacts.Remove(contact);
+            ContactDbHelper.WriteToJsonFile(contacts);
 
             return NoContent();
         }

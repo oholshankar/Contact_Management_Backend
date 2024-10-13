@@ -1,3 +1,5 @@
+using Contact_Management.ContactException;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +18,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader());
+
+app.UseMiddleware<ContactExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
