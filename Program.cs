@@ -17,7 +17,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader());
+app.UseCors(options => options.WithOrigins("http://localhost:4200", "https://angularcontactapp.azurewebsites.net/").AllowAnyMethod().AllowAnyHeader());
 
 app.UseMiddleware<ContactExceptionMiddleware>();
 
